@@ -10,24 +10,39 @@ public class Calculator
         // Replace any escaped "\n" sequence with actual newlines to handle user input
         inputString = inputString.Replace(@"\n", Environment.NewLine);
 
-        string[] delimiters = [",", "\n"];
+        List<string> delimiters = [",", "\n"]; // Default delimiters
 
-        // Regular expression to match both formats:
+        // Regular expression to match:
         // 1. //{delimiter}\n{numbers} (single character delimiter)
         // 2. //[{delimiter}]\n{numbers} (multi-character delimiter)
+        // 3. //[{delimiter1}][{delimiter2}]...\n{numbers} (multiple delimiters)
         var regex = new Regex(@"^//(\[.*\]|\S)\n(.*)$");
 
         Match match = regex.Match(inputString);
         if (match.Success)
         {
-            // Extract the custom delimiter
-            string customDelimiter = match.Groups[1].Value.Trim('[', ']');
-            delimiters = [customDelimiter];
-            inputString = match.Groups[2].Value; // Extract the numbers part
+            // Extract the custom delimiters
+            string delimiterPart = match.Groups[1].Value;
+            string numbersPart = match.Groups[2].Value;
+
+            // Handle multiple delimiters
+            if (delimiterPart.StartsWith('[') && delimiterPart.EndsWith(']'))
+            {
+                var customDelimiters = delimiterPart.Trim('[', ']').Split("][", StringSplitOptions.RemoveEmptyEntries);
+                delimiters.AddRange(customDelimiters);
+            }
+            else
+            {
+                // Single delimiter case
+                delimiters.Add(delimiterPart);
+                numbersPart = inputString[(match.Groups[1].Length + 3)..]; // Skip the `//{delimiter}\n` part
+            }
+
+            inputString = numbersPart; // Extract the numbers part
         }
 
         // Split the input string based on both commas and newlines
-        var splitNumbers = inputString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        var splitNumbers = inputString.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
 
         // Convert the string array to integers
         var parsedNumbers = splitNumbers

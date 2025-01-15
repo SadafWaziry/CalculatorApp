@@ -2,7 +2,7 @@
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Enter numbers (use custom delimiters of any length if starting with //[delimiter]\\n, e.g., //[***]\\n1***2):");
+        Console.WriteLine("Enter numbers (use multiple custom delimiters if starting with //[del1][del2]\\n, e.g., //[***][%%]\\n1***2%%3):");
         string input = Console.ReadLine() ?? string.Empty;
 
         try
