@@ -13,9 +13,13 @@ public class Calculator
         // Split the input string based on both commas and newlines
         var splitNumbers = inputString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
-        // Convert the string array to integers and sum them up
-        return splitNumbers
-            .Select(num => int.TryParse(num, out int parsedNumber) ? parsedNumber : 0)
-            .Sum();
+        // Convert the string array to integers
+        var parsedNumbers = splitNumbers.Select(num => int.TryParse(num, out int parsedNumber) ? parsedNumber : 0);
+        
+        var negatives = parsedNumbers.Where(n => n < 0).ToList();
+        if (negatives.Count > 0)
+            throw new ArgumentException($"Negative numbers not allowed: {string.Join(", ", negatives)}");
+
+        return parsedNumbers.Sum(); 
     }
 }
