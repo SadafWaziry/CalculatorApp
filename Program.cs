@@ -2,7 +2,7 @@
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Enter numbers (separated by commas or newlines; Negative or greater than 1000 numbers are not allwoed):");
+        Console.WriteLine("Enter numbers (use a custom single-character delimiter if starting with '//', e.g., //#\\n1#2):");
         string input = Console.ReadLine() ?? string.Empty;
 
         try

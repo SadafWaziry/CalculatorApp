@@ -8,7 +8,13 @@ public class Calculator
         // Replace any escaped "\n" sequence with actual newlines to handle user input
         inputString = inputString.Replace(@"\n", Environment.NewLine);
 
-        var delimiters = new[] { ',', '\n' };
+        string[] delimiters = [",", "\n"];
+        if (inputString.StartsWith("//"))
+        {
+            var delimiterEnd = inputString.IndexOf('\n');
+            delimiters = [inputString[2].ToString()];
+            inputString = inputString[(delimiterEnd + 1)..];
+        }
 
         // Split the input string based on both commas and newlines
         var splitNumbers = inputString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
