@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+
 public class Calculator
 {
     public static int CalculateSum(string inputString)
@@ -9,11 +11,19 @@ public class Calculator
         inputString = inputString.Replace(@"\n", Environment.NewLine);
 
         string[] delimiters = [",", "\n"];
-        if (inputString.StartsWith("//"))
+
+        // Regular expression to match both formats:
+        // 1. //{delimiter}\n{numbers} (single character delimiter)
+        // 2. //[{delimiter}]\n{numbers} (multi-character delimiter)
+        var regex = new Regex(@"^//(\[.*\]|\S)\n(.*)$");
+
+        Match match = regex.Match(inputString);
+        if (match.Success)
         {
-            var delimiterEnd = inputString.IndexOf('\n');
-            delimiters = [inputString[2].ToString()];
-            inputString = inputString[(delimiterEnd + 1)..];
+            // Extract the custom delimiter
+            string customDelimiter = match.Groups[1].Value.Trim('[', ']');
+            delimiters = [customDelimiter];
+            inputString = match.Groups[2].Value; // Extract the numbers part
         }
 
         // Split the input string based on both commas and newlines
