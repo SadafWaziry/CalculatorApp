@@ -14,7 +14,7 @@ Before running the application and tests, make sure you have the following insta
 
 ### Clone the Repository
 
-    git clone https://github.com/yourusername/CalculatorApp.git
+    git clone https://github.com/sadafwaziry/CalculatorApp.git
     cd CalculatorApp/src
 
 ### Restore Dependencies
