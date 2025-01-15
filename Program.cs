@@ -2,7 +2,7 @@
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Enter numbers (max 2, separated by commas):");
+        Console.WriteLine("Enter numbers (separated by commas):");
         string input = Console.ReadLine() ?? string.Empty;
 
         try
