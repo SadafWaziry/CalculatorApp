@@ -4,9 +4,14 @@ public class Calculator
     {
         if (string.IsNullOrEmpty(inputString)) 
             return 0;
+        
+        // Replace any escaped "\n" sequence with actual newlines to handle user input
+        inputString = inputString.Replace(@"\n", Environment.NewLine);
 
-        // Split the input string into an array of numbers based on the comma delimiter
-        var splitNumbers = inputString.Split(',');
+        var delimiters = new[] { ',', '\n' };
+
+        // Split the input string based on both commas and newlines
+        var splitNumbers = inputString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
         // Convert the string array to integers and sum them up
         return splitNumbers

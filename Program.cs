@@ -2,7 +2,7 @@
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Enter numbers (separated by commas):");
+        Console.WriteLine("Enter numbers (separated by commas or newlines):");
         string input = Console.ReadLine() ?? string.Empty;
 
         try
