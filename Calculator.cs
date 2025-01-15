@@ -14,7 +14,9 @@ public class Calculator
         var splitNumbers = inputString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
 
         // Convert the string array to integers
-        var parsedNumbers = splitNumbers.Select(num => int.TryParse(num, out int parsedNumber) ? parsedNumber : 0);
+        var parsedNumbers = splitNumbers
+                            .Select(num => int.TryParse(num, out int parsedNumber) ? parsedNumber : 0)
+                            .Where(num => num <= 1000);
         
         var negatives = parsedNumbers.Where(n => n < 0).ToList();
         if (negatives.Count > 0)
