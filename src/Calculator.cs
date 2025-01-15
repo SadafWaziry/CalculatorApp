@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 public class Calculator
 {
-    public static int CalculateSum(string inputString)
+    public static int CalculateSum(string inputString, OperationOptions? options = null)
     {
         if (string.IsNullOrEmpty(inputString)) 
             return 0;
@@ -10,7 +10,7 @@ public class Calculator
         // Replace any escaped "\n" sequence with actual newlines to handle user input
         inputString = inputString.Replace(@"\n", Environment.NewLine);
 
-        List<string> delimiters = [",", "\n"]; // Default delimiters
+        List<string> delimiters = [",", options?.CustomDelimiter ?? "\n"];
 
         // Regular expression to match:
         // 1. //{delimiter}\n{numbers} (single character delimiter)
@@ -45,14 +45,22 @@ public class Calculator
         var splitNumbers = inputString.Split(delimiters.ToArray(), StringSplitOptions.RemoveEmptyEntries);
 
         // Convert the string array to integers
+        int maximumValue = options?.MaxAllowedValue ?? 1000;
+
         var parsedNumbers = splitNumbers
                             .Select(num => int.TryParse(num, out int parsedNumber) ? parsedNumber : 0)
-                            .Where(num => num <= 1000);
+                            .Where(num => num <=  maximumValue);
         
         var negatives = parsedNumbers.Where(n => n < 0).ToList();
-        if (negatives.Count > 0)
+
+        if (negatives.Count > 0 && !(options?.AllowNegativeValues ?? false))
             throw new ArgumentException($"Negative numbers not allowed: {string.Join(", ", negatives)}");
 
-        return parsedNumbers.Sum(); 
+        var formula = string.Join(" + ", parsedNumbers);
+        int result = parsedNumbers.Sum();
+
+        Console.WriteLine($"{formula} = {result}");
+
+        return result; 
     }
 }
